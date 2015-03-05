@@ -1,0 +1,4 @@
+
+pod 'AFOAuth2Manager'
+inhibit_all_warnings!
+
