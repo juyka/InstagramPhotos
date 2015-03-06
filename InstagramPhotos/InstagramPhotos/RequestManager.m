@@ -30,7 +30,6 @@
 		manager = [[self alloc] init];
 		manager.oparationManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.instagram.com/"]];
 		manager.clientID = @"7ff6cda2a4ea4646bcc649e1b1099a9d";
-
 	});
 	
 	return manager;
@@ -42,10 +41,7 @@
 	self.mediaIdentifiers = NSMutableArray.new;
 
 	NSString *urlString = @"/v1/users/search";
-	
-	NSDictionary *parameters = @{
-								 @"q": userName,
-								 @"client_id": self.clientID};
+	NSDictionary *parameters = @{@"q": userName, @"client_id": self.clientID};
 	
 	[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		
@@ -59,37 +55,30 @@
 	}];
 }
 
-
 - (void)loadMedia:(NSString *)userID withMaxID:(NSString *)maxID {
 	
-	NSString *urlString =[NSString stringWithFormat:@"/v1/users/%@/media/recent/", userID];
+	NSString *urlString = [NSString stringWithFormat:@"/v1/users/%@/media/recent/", userID];
 	
-	NSMutableDictionary *parameters = @{
-								 @"count": @"700",
-								 @"client_id": self.clientID}.mutableCopy;
-	
-	if (maxID) {
-		[parameters setObject:maxID forKey:@"max_id"];
-	}
+	NSMutableDictionary *parameters = @{@"count": @"700", @"client_id": self.clientID}.mutableCopy;
+	[parameters setValue:maxID forKey:@"max_id"];
 	
 	[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-		NSArray *data = [responseObject objectForKey:@"data"];
-		
+		NSArray *data = responseObject[@"data"];
 		
 		for (id object in data) {
-			NSString *mediaID = [object objectForKey:@"id"];
-			NSString *type = [object objectForKey:@"type"];
+			NSString *mediaID = object[@"id"];
+			NSString *type = object[@"type"];
 			if (mediaID && [type isEqualToString:@"image"]) {
 				[self.mediaIdentifiers addObject:mediaID];
 			}
 		}
 		
-		id pagination = [responseObject objectForKey:@"pagination"];
-		NSString *nextMaxID = [pagination objectForKey:@"next_max_id"];
+		id pagination = responseObject[@"pagination"];
+		NSString *nextMaxID = pagination[@"next_max_id"];
+		
 		if (nextMaxID) {
 			[self loadMedia:userID withMaxID:nextMaxID];
-		}
-		else {
+		} else {
 			[self loadMediaDetails];
 		}
 
@@ -110,8 +99,7 @@
 	[self.mediaIdentifiers enumerateObjectsUsingBlock:^(NSString *imageID, NSUInteger idx, BOOL *stop) {
 		NSString *urlString = [NSString stringWithFormat:@"/v1/media/%@", imageID];
 		
-		NSDictionary *parameters = @{
-									 @"client_id": self.clientID};
+		NSDictionary *parameters = @{@"client_id": self.clientID};
 		[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 			
 			InstagramPicture *picture = InstagramPicture.new;
@@ -120,13 +108,14 @@
 			id image = [[data objectForKey:@"images"] objectForKey:@"standard_resolution"];
 			picture.imageURL = [image objectForKey:@"url"];
 			id caption = [data objectForKey:@"caption"];
+			
 			if (caption != (id)[NSNull null]) {
 				picture.caption = [caption objectForKey:@"text"];
 			}
 	
 			picture.likesCount = [[data objectForKey:@"likes"] objectForKey:@"count"];
-			
 			[pictures addObject:picture];
+			
 			if (pictures.count == picturesCount) {
 				[self findMostPopular:pictures];
 			}
@@ -134,7 +123,6 @@
 		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 			NSLog(@"Error: %@", error);
 		}];
-
 	}];
 }
 
@@ -144,9 +132,7 @@
 		return [second.likesCount compare:first.likesCount];
 	}];
 	
-	NSArray *mostPopular = [sortedPictures subarrayWithRange:NSMakeRange(0, (sortedPictures.count > 3) ? 3 : sortedPictures.count)];
-	
-	self.block(mostPopular);
+	self.block([sortedPictures subarrayWithRange:NSMakeRange(0, MIN(3, sortedPictures.count))]);
 }
 
 @end
