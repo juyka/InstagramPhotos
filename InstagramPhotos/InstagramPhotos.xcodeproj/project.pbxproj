@@ -18,7 +18,7 @@
 		D639D9711AA64853000E2F5B /* PhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D639D9701AA64853000E2F5B /* PhotosViewController.m */; };
 		D639D9741AA648A8000E2F5B /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D639D9731AA648A8000E2F5B /* PhotoTableViewCell.m */; };
 		D639D9781AA87155000E2F5B /* RequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D639D9771AA87155000E2F5B /* RequestManager.m */; };
-		D639D97B1AA8A3DA000E2F5B /* IntagramUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D639D97A1AA8A3DA000E2F5B /* IntagramUser.m */; };
+		D639D97B1AA8A3DA000E2F5B /* InstagramPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = D639D97A1AA8A3DA000E2F5B /* InstagramPicture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +52,8 @@
 		D639D9731AA648A8000E2F5B /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = ../PhotoTableViewCell.m; sourceTree = "<group>"; };
 		D639D9761AA87155000E2F5B /* RequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestManager.h; sourceTree = "<group>"; };
 		D639D9771AA87155000E2F5B /* RequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestManager.m; sourceTree = "<group>"; };
-		D639D9791AA8A3DA000E2F5B /* IntagramUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntagramUser.h; sourceTree = "<group>"; };
-		D639D97A1AA8A3DA000E2F5B /* IntagramUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntagramUser.m; sourceTree = "<group>"; };
+		D639D9791AA8A3DA000E2F5B /* InstagramPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstagramPicture.h; sourceTree = "<group>"; };
+		D639D97A1AA8A3DA000E2F5B /* InstagramPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstagramPicture.m; sourceTree = "<group>"; };
 		F7549CB1D4EECEEB7230CE9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1CF8EC9167E54311900D12 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,8 +123,8 @@
 				D639D9701AA64853000E2F5B /* PhotosViewController.m */,
 				D639D9761AA87155000E2F5B /* RequestManager.h */,
 				D639D9771AA87155000E2F5B /* RequestManager.m */,
-				D639D9791AA8A3DA000E2F5B /* IntagramUser.h */,
-				D639D97A1AA8A3DA000E2F5B /* IntagramUser.m */,
+				D639D9791AA8A3DA000E2F5B /* InstagramPicture.h */,
+				D639D97A1AA8A3DA000E2F5B /* InstagramPicture.m */,
 			);
 			path = InstagramPhotos;
 			sourceTree = "<group>";
@@ -301,7 +301,7 @@
 				D639D9741AA648A8000E2F5B /* PhotoTableViewCell.m in Sources */,
 				D62CC71E1AA6321700DB1F44 /* ViewController.m in Sources */,
 				D639D9711AA64853000E2F5B /* PhotosViewController.m in Sources */,
-				D639D97B1AA8A3DA000E2F5B /* IntagramUser.m in Sources */,
+				D639D97B1AA8A3DA000E2F5B /* InstagramPicture.m in Sources */,
 				D639D9781AA87155000E2F5B /* RequestManager.m in Sources */,
 				D62CC71B1AA6321700DB1F44 /* AppDelegate.m in Sources */,
 				D62CC7181AA6321700DB1F44 /* main.m in Sources */,

@@ -7,8 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "PhotosViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *texField;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
@@ -18,6 +19,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	self.texField.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -26,7 +28,22 @@
 
 - (IBAction)search:(id)sender {
 	
-	[self performSegueWithIdentifier:@"PhotosSegue" sender:nil];
+	NSString *userName = self.texField.text;
+	[self performSegueWithIdentifier:@"PhotosSegue" sender:userName];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	
+	[textField resignFirstResponder];
+	return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(NSString *)sender {
+	
+	if ([segue.identifier isEqualToString:@"PhotosSegue"]) {
+		PhotosViewController *controller = segue.destinationViewController;
+		controller.userName = sender;
+	}
 }
 
 @end

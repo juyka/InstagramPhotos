@@ -10,4 +10,6 @@
 
 @interface PhotosViewController : UIViewController
 
+@property (nonatomic) NSString *userName;
+
 @end

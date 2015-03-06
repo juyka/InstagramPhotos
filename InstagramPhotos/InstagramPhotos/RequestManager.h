@@ -12,6 +12,6 @@
 
 + (instancetype)manager;
 
-- (void)recentMedia;
+- (void)recentMedia:(NSString *)userName withBlock:(void(^)(NSArray*))block;
 
 @end

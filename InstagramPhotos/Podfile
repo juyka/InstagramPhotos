@@ -1,4 +1,4 @@
 
-pod 'AFOAuth2Manager'
+pod 'AFNetworking'
 inhibit_all_warnings!
 
