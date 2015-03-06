@@ -45,8 +45,8 @@
 	
 	[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		
-		NSArray *data = [responseObject objectForKey:@"data"];
-		NSString *userID = [data.firstObject objectForKey:@"id"];
+		NSArray *data = responseObject[@"data"];
+		NSString *userID = data.firstObject[@"id"];
 		
 		[self loadMedia:userID withMaxID:nil];
 		
@@ -64,22 +64,22 @@
 	[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		NSArray *data = responseObject[@"data"];
 		
-		for (id object in data) {
+		for (NSDictionary *object in data) {
 			InstagramPicture *picture = InstagramPicture.new;
 			
 			NSString *type = object[@"type"];
 			if ([type isEqualToString:@"image"]) {
 				
-				picture.mediaID = [object objectForKey:@"id"];
-				id image = [[object objectForKey:@"images"] objectForKey:@"standard_resolution"];
-				picture.imageURL = [image objectForKey:@"url"];
-				id caption = [object objectForKey:@"caption"];
+				picture.mediaID = object[@"id"];
+				id image = object[@"images"][@"standard_resolution"];
+				picture.imageURL = image[@"url"];
+				id caption = object[@"caption"];
 				
 				if (caption != (id)[NSNull null]) {
-					picture.caption = [caption objectForKey:@"text"];
+					picture.caption = caption[@"text"];
 				}
 				
-				picture.likesCount = [[object objectForKey:@"likes"] objectForKey:@"count"];
+				picture.likesCount = object[@"likes"][@"count"];
 				[self.pictures addObject:picture];
 			}
 		}
