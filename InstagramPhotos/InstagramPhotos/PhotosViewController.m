@@ -22,9 +22,20 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]
+												  initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+	
+	UIBarButtonItem *progressIndicator = [[UIBarButtonItem alloc]
+										  initWithCustomView:activityIndicator];
+	
+	self.navigationItem.rightBarButtonItem = progressIndicator;
+	activityIndicator.hidden = NO;
+	[activityIndicator startAnimating];
+
 	__weak typeof(self) weakSelf = self;
 	[[RequestManager manager] recentMedia:self.userName withBlock:^(NSArray *array) {
 		weakSelf.dataSource = array;
+		weakSelf.navigationItem.rightBarButtonItem = nil;
 		[weakSelf.tableView reloadData];
 	}];
 	

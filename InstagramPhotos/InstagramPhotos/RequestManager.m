@@ -14,7 +14,7 @@
 
 @property (nonatomic) AFHTTPRequestOperationManager *oparationManager;
 @property (nonatomic) NSString *clientID;
-@property (nonatomic) NSMutableArray *mediaIdentifiers;
+@property (nonatomic) NSMutableArray *pictures;
 @property (nonatomic, copy) void (^block)(NSArray *);
 
 @end
@@ -38,7 +38,7 @@
 - (void)recentMedia:(NSString *)userName withBlock:(void(^)(NSArray*))block {
 	
 	self.block = block;
-	self.mediaIdentifiers = NSMutableArray.new;
+	self.pictures = NSMutableArray.new;
 
 	NSString *urlString = @"/v1/users/search";
 	NSDictionary *parameters = @{@"q": userName, @"client_id": self.clientID};
@@ -58,18 +58,29 @@
 - (void)loadMedia:(NSString *)userID withMaxID:(NSString *)maxID {
 	
 	NSString *urlString = [NSString stringWithFormat:@"/v1/users/%@/media/recent/", userID];
-	
-	NSMutableDictionary *parameters = @{@"count": @"700", @"client_id": self.clientID}.mutableCopy;
+	NSMutableDictionary *parameters = @{@"count": @"20", @"client_id": self.clientID}.mutableCopy;
 	[parameters setValue:maxID forKey:@"max_id"];
 	
 	[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		NSArray *data = responseObject[@"data"];
 		
 		for (id object in data) {
-			NSString *mediaID = object[@"id"];
+			InstagramPicture *picture = InstagramPicture.new;
+			
 			NSString *type = object[@"type"];
-			if (mediaID && [type isEqualToString:@"image"]) {
-				[self.mediaIdentifiers addObject:mediaID];
+			if ([type isEqualToString:@"image"]) {
+				
+				picture.mediaID = [object objectForKey:@"id"];
+				id image = [[object objectForKey:@"images"] objectForKey:@"standard_resolution"];
+				picture.imageURL = [image objectForKey:@"url"];
+				id caption = [object objectForKey:@"caption"];
+				
+				if (caption != (id)[NSNull null]) {
+					picture.caption = [caption objectForKey:@"text"];
+				}
+				
+				picture.likesCount = [[object objectForKey:@"likes"] objectForKey:@"count"];
+				[self.pictures addObject:picture];
 			}
 		}
 		
@@ -79,7 +90,7 @@
 		if (nextMaxID) {
 			[self loadMedia:userID withMaxID:nextMaxID];
 		} else {
-			[self loadMediaDetails];
+			[self findMostPopular];
 		}
 
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -92,43 +103,9 @@
 	}];
 }
 
-- (void)loadMediaDetails {
+- (void)findMostPopular {
 	
-	NSMutableArray *pictures = NSMutableArray.new;
-	NSInteger picturesCount  = self.mediaIdentifiers.count;
-	[self.mediaIdentifiers enumerateObjectsUsingBlock:^(NSString *imageID, NSUInteger idx, BOOL *stop) {
-		NSString *urlString = [NSString stringWithFormat:@"/v1/media/%@", imageID];
-		
-		NSDictionary *parameters = @{@"client_id": self.clientID};
-		[self.oparationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-			
-			InstagramPicture *picture = InstagramPicture.new;
-			id data = [responseObject objectForKey:@"data"];
-			picture.mediaID = [data objectForKey:@"id"];
-			id image = [[data objectForKey:@"images"] objectForKey:@"standard_resolution"];
-			picture.imageURL = [image objectForKey:@"url"];
-			id caption = [data objectForKey:@"caption"];
-			
-			if (caption != (id)[NSNull null]) {
-				picture.caption = [caption objectForKey:@"text"];
-			}
-	
-			picture.likesCount = [[data objectForKey:@"likes"] objectForKey:@"count"];
-			[pictures addObject:picture];
-			
-			if (pictures.count == picturesCount) {
-				[self findMostPopular:pictures];
-			}
-			
-		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-			NSLog(@"Error: %@", error);
-		}];
-	}];
-}
-
-- (void)findMostPopular:(NSMutableArray *)pictures {
-	
-	NSArray *sortedPictures = [pictures sortedArrayUsingComparator:^NSComparisonResult(InstagramPicture *first, InstagramPicture *second) {
+	NSArray *sortedPictures = [self.pictures sortedArrayUsingComparator:^NSComparisonResult(InstagramPicture *first, InstagramPicture *second) {
 		return [second.likesCount compare:first.likesCount];
 	}];
 	
