@@ -64,15 +64,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	
 	return self.dataSource.count;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-	BOOL shoudNavBarHide = ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait);
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-	
+
+	BOOL shoudNavBarHide = ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait);
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
