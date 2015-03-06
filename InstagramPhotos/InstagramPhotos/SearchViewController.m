@@ -6,16 +6,16 @@
 //  Copyright (c) 2015 Nastya. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "SearchViewController.h"
 #import "PhotosViewController.h"
 
-@interface ViewController ()<UITextFieldDelegate>
+@interface SearchViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *texField;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
 @end
 
-@implementation ViewController
+@implementation SearchViewController
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
